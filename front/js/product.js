@@ -54,9 +54,9 @@ function sendToCart(){
             id: id,
             imgAlt : productImage.alt,
             imgSrc : productImage.src,
-            productName: productName.innerHTML,
+            productName: productName.textContent,
             color: color,
-            price: productPrice.innerHTML,
+            price: productPrice.textContent,
             quantity: quantity
         }
 
