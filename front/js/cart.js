@@ -1,14 +1,15 @@
 const cart = []
 
 retrieveProductCart()
-cart.forEach((product) => displayProductCart(product))
 
 function retrieveProductCart() {
+  
     for (let i = 0; i < localStorage.length; i++) {
       const product = localStorage.getItem(localStorage.key(i))
       const productObjects = JSON.parse(product)
       cart.push(productObjects)
     }
+  cart.forEach((product) => displayProductCart(product))
 }
 
 /* color: "Silver"
@@ -84,7 +85,42 @@ function displayProductCart(product) {
   deleteItem.classList.add("deleteItem")
   deleteItem.textContent = "Supprimer"
   cartItemContentSettingsDelete.appendChild(deleteItem)
+
+  displayTotalPrice()
+  displayTotalQuantity()
+/*   cartTotalQuantity += parseInt(cartItemQuantity.value)
+  displaytotalQuantity(cartTotalQuantity)
+
+  let cartTotalPrice = 0
+  cartTotalPrice = cartTotalQuantity * product.price
+  displayTotalPrice(cartTotalPrice)
+  console.log(cartTotalPrice) */
 }
+
+function displayTotalPrice() {
+  let price = 0
+  const displayPrice = document.getElementById("totalPrice")
+  cart.forEach((product) => {
+  const totalPrice = product.price * product.quantity
+  price += totalPrice
+})
+displayPrice.textContent = `${price},00`
+}
+
+function displayTotalQuantity() {
+  let quantity = 0
+  const displayQuantity = document.getElementById("totalQuantity")
+  cart.forEach((product) => {
+    quantity += parseInt(product.quantity)
+  })
+displayQuantity.textContent = quantity
+}
+
+/* function displayTotalPrice(cartTotalPrice) {
+  const totalPrice = document.getElementById("totalPrice")
+  totalPrice.textContent = cartTotalPrice
+} */
+
 
 
 /* function addAllProducts(cart) {
