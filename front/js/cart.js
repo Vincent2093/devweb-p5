@@ -21,69 +21,69 @@ quantity: "9" */
 
 function displayProductCart(product) {
   const cartItem = document.createElement("article")
-  document.querySelector("#cart__items").appendChild(cartItem)
   cartItem.classList.add("cart__item")
   cartItem.setAttribute("data-id", product.id)
   cartItem.setAttribute("data-color", product.color)
+  document.querySelector("#cart__items").appendChild(cartItem)
 
   const cartItemImg = document.createElement("div")
-  cartItem.appendChild(cartItemImg)
   cartItemImg.classList.add("cart__item__img")
+  cartItem.appendChild(cartItemImg)
 
   const cartImg = document.createElement("img")
-  cartItemImg.appendChild(cartImg)
   cartImg.src = product.imgSrc
   cartImg.alt = product.imgAlt
+  cartItemImg.appendChild(cartImg)
   
   const cartItemContent = document.createElement("div")
-  cartItem.appendChild(cartItemContent)
   cartItemContent.classList.add("cart__item__content")
+  cartItem.appendChild(cartItemContent)
 
   const cartItemContentDescription = document.createElement("div")
-  cartItemContent.appendChild(cartItemContentDescription)
   cartItemContentDescription.classList.add("cart__item__content__description")
+  cartItemContent.appendChild(cartItemContentDescription)
 
   const cartProductName = document.createElement("h2")
-  cartItemContentDescription.appendChild(cartProductName)
   cartProductName.textContent = product.productName
+  cartItemContentDescription.appendChild(cartProductName)
 
   const cartItemColor = document.createElement("p")
-  cartItemContentDescription.appendChild(cartItemColor)
   cartItemColor.textContent = product.color
+  cartItemContentDescription.appendChild(cartItemColor)
 
   const cartItemPrice = document.createElement("p")
+  cartItemPrice.textContent = `${product.price},00 €`
   cartItemContentDescription.appendChild(cartItemPrice)
-  cartItemPrice.textContent = `${product.price} €`
 
   const cartItemContentSettings = document.createElement("div")
-  cartItemContent.appendChild(cartItemContentSettings)
   cartItemContentSettings.classList.add("cart__item__content__settings")
+  cartItemContent.appendChild(cartItemContentSettings)
 
   const cartItemContentSettingsQuantity = document.createElement("div")
-  cartItemContentSettings.appendChild(cartItemContentSettingsQuantity)
   cartItemContentSettingsQuantity.classList.add("cart__item__content__settings__quantity")
+  cartItemContentSettings.appendChild(cartItemContentSettingsQuantity)
 
   const cartItemQuantityParagraph = document.createElement("p")
-  cartItemContentSettingsQuantity.appendChild(cartItemQuantityParagraph)
   cartItemQuantityParagraph.textContent = "Qté :"
+  cartItemContentSettingsQuantity.appendChild(cartItemQuantityParagraph)
 
   const cartItemQuantity = document.createElement("input")
-  cartItemContentSettingsQuantity.appendChild(cartItemQuantity)
   cartItemQuantity.classList.add("itemQuantity")
   cartItemQuantity.setAttribute("type", "number")
   cartItemQuantity.setAttribute("name", "itemQuantity")
   cartItemQuantity.setAttribute("min", "1")
   cartItemQuantity.setAttribute("max", "100")
   cartItemQuantity.setAttribute("value", product.quantity)
+  cartItemContentSettingsQuantity.appendChild(cartItemQuantity)
 
   const cartItemContentSettingsDelete = document.createElement("div")
-  cartItemContentSettings.appendChild(cartItemContentSettingsDelete)
   cartItemContentSettingsDelete.classList.add("cart__item__content__settings__delete")
+  cartItemContentSettings.appendChild(cartItemContentSettingsDelete)
 
   const deleteItem = document.createElement("p")
-  cartItemContentSettingsDelete.appendChild(deleteItem)
   deleteItem.classList.add("deleteItem")
   deleteItem.textContent = "Supprimer"
+  cartItemContentSettingsDelete.appendChild(deleteItem)
 }
 
 
