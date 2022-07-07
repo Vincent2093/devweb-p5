@@ -1,4 +1,4 @@
-let cart = []
+//let cart = []
 
 retrieveProductCart()
 
@@ -73,7 +73,7 @@ function displayProductCart(cart) {
   cartItemQuantity.setAttribute("max", "100")
   cartItemQuantity.setAttribute("value", cart.quantity)
   cartItemContentSettingsQuantity.appendChild(cartItemQuantity)
-  cartItemQuantity.addEventListener("change", () => changeProductQuantity(cart.id, cartItemQuantity.value, cart))
+  cartItemQuantity.addEventListener("change", () => changeProductQuantity(cart.id, cartItemQuantity.value))
 
   const cartItemContentSettingsDelete = document.createElement("div")
   cartItemContentSettingsDelete.classList.add("cart__item__content__settings__delete")
@@ -83,22 +83,31 @@ function displayProductCart(cart) {
   deleteItem.classList.add("deleteItem")
   deleteItem.textContent = "Supprimer"
   cartItemContentSettingsDelete.appendChild(deleteItem)
+  deleteItem.addEventListener("click", () => deleteProduct(cart.id))
 
   displayTotalPrice()
   displayTotalQuantity()
 }
 
-function updateLocalStorage(product) {
-  const orderData = JSON.stringify(product)
-  localStorage.setItem(cart.id, orderData)
+function deleteProduct(id) {
+  const productDelete = cart.findIndex((cart) => cart.id === id)
+  cart.splice(productDelete, 1)
+  updateLocalStorage()
+  location.reload()
+}
+
+function updateLocalStorage() {
+//  const orderData = JSON.stringify(cart)
+//  localStorage.setItem(cart.id, orderData)
+  localStorage.setItem('cart', JSON.stringify(cart));
 } 
 
-function changeProductQuantity(id, value, cart) {
+function changeProductQuantity(id, value) {
   const productUpdate = cart.find((cart) => cart.id === id)
   productUpdate.quantity = value
   displayTotalPrice()
   displayTotalQuantity()
-  updateLocalStorage(cart)
+  updateLocalStorage()
 }
 
 function displayTotalPrice() {
