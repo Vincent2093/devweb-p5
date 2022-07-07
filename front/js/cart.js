@@ -1,4 +1,4 @@
-//let cart = []
+let cart = []
 
 retrieveProductCart()
 
@@ -86,18 +86,10 @@ function displayProductCart(cart) {
 
   displayTotalPrice()
   displayTotalQuantity()
-/*   cartTotalQuantity += parseInt(cartItemQuantity.value)
-  displaytotalQuantity(cartTotalQuantity)
-
-  let cartTotalPrice = 0
-  cartTotalPrice = cartTotalQuantity * cart.price
-  displayTotalPrice(cartTotalPrice)
-  console.log(cartTotalPrice) */
 }
 
 function updateLocalStorage(product) {
   const orderData = JSON.stringify(product)
-  //console.log("data", orderData)
   localStorage.setItem(cart.id, orderData)
 } 
 
@@ -128,70 +120,15 @@ function displayTotalQuantity() {
 displayQuantity.textContent = quantity
 }
 
-/* function displayTotalPrice(cartTotalPrice) {
-  const totalPrice = document.getElementById("totalPrice")
-  totalPrice.textContent = cartTotalPrice
-} */
-
-
-
-/* function addAllProducts(cart) {
-  cart.forEach((productObject) => {
-    displayProduct(productObject)
-  })
-}
-
-function displayProduct(productObject) {
-  console.log(productObject)
-} */
-
-// -----------------------------------------------------------------------------------------
-
-/* const orderBtn = document.getElementById("order")
-orderBtn.addEventListener("click", (e) => submitForm(e))
-
-function submitForm(e) {
-  e.preventDefault()
-  if (cart.length === 0) alert("Votre panier est vide !")
-  const form = document.querySelector(".cart__order__form")
-  const contact = orderForm()
-  fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    body: JSON.stringify(contact),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(response => response.json())
-    .then(data => console.log(data))
-  console.log(form.elements.firstName.value)
-}
-
-function orderForm() {
-  const contact = {
-    contact: {
-      firstName: "tet",
-      lastName: "tet",
-      address: "tet",
-      city: "tet",
-      email: "tet"
-      },
-      products: ["tet"]
-  }
-  return contact
-} */
+// FORM
 
 const cartOrderForm = document.querySelector(".cart__order__form")
-const cartOrderFormSubmit = document.querySelector(".cart__order__form__submit")
+const cartOrderFormSubmit = document.getElementById("order")
 
 cartOrderForm.firstName.addEventListener("change", () => checkFirstName(firstName))
-
 cartOrderForm.lastName.addEventListener("change", () => checkLastName(lastName))
-
 cartOrderForm.address.addEventListener("change", () => checkAddress(address))
-
 cartOrderForm.city.addEventListener("change", () => checkCity(city))
-
 cartOrderForm.email.addEventListener("change", () => checkEmail(email))
 
 function checkFirstName(firstName) {
@@ -243,7 +180,7 @@ function checkCity(city) {
 
   if (test) {
     errorMsg.textContent = " "
-    return true;
+    return true
   } else {
     errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
     return false
@@ -264,35 +201,31 @@ function checkEmail(email) {
   }
 }
 
-function submitForm() {
-  cartOrderFormSubmit.addEventListener("click", function (e) {
-    e.preventDefault()
+cartOrderFormSubmit.addEventListener("click", (e) => submitForm(e))
 
+function submitForm(e) {
+    e.preventDefault()
     const firstName = document.getElementById("firstName")
     const lastName = document.getElementById("lastName")
     const address = document.getElementById("address")
     const city = document.getElementById("city")
     const email = document.getElementById("email")
 
-    if (
+    if (cart.length === 0) {
+      alert("Votre panier est vide ! ")
+    } else if (
       checkFirstName(firstName) &&
       checkLastName(lastName) &&
       checkAddress(address) &&
       checkCity(city) &&
       checkEmail(email)
     ) {
-      if (cart.length == 0) {
-        alert("Votre panier est vide ! ")
-      } else {
-        sendOrderData()
-        alert("Votre commande a bien été prise en compte !")
-      }
+      sendOrderData()
+      alert("Votre commande a bien été prise en compte !")
     } else {
       alert("Merci de vérifier votre formulaire !")
     }
-  });
 }
-submitForm()
 
 function prepareOrderData() {
   const contactData = {
@@ -312,11 +245,9 @@ function prepareOrderData() {
     products: idProducts,
     contact: contactData
   }
-  console.log(orderData)
   return orderData
 }
 
-//envoyer les données du formulaire et les traiter
 function sendOrderData() {
   const orderData = prepareOrderData()
 
