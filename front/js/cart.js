@@ -1,12 +1,11 @@
-//let cart = []
+let cart = []
 
 retrieveProductCart()
 
 function retrieveProductCart() {
 //  console.log(localStorage.getItem('cart'))
   cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) :  [];
-  
-  if(cart.length === 0){
+  if(cart.length === 0) {
     return;
   }
     /* for (let i = 0; i < localStorage.length; i++) {
@@ -148,10 +147,10 @@ function checkFirstName(firstName) {
   if (test) {
     errorMsg.textContent = " "
     return true
-  } else {
-    errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
-    return false
   }
+
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
+  return false
 }
 
 function checkLastName(lastName) {
@@ -162,10 +161,10 @@ function checkLastName(lastName) {
   if (test) {
     errorMsg.textContent = " "
     return true
-  } else {
-    errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
-    return false
   }
+
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
+  return false
 }
 
 function checkAddress(address) {
@@ -176,10 +175,10 @@ function checkAddress(address) {
   if (test) {
     errorMsg.textContent = " "
     return true
-  } else {
-    errorMsg.textContent = "Deux caractères minimum et utilisation de lettres et chiffres uniquement."
-    return false
   }
+
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres et chiffres uniquement."
+  return false
 }
 
 function checkCity(city) {
@@ -190,10 +189,10 @@ function checkCity(city) {
   if (test) {
     errorMsg.textContent = " "
     return true
-  } else {
-    errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
-    return false
   }
+
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
+  return false
 }
 
 function checkEmail(email) {
@@ -204,10 +203,10 @@ function checkEmail(email) {
   if (test) {
     errorMsg.textContent = " "
     return true
-  } else {
-    errorMsg.textContent = "Merci de respecter le format xx@xx.xx"
-    return false
   }
+
+  errorMsg.textContent = "Merci de respecter le format xx@xx.xx"
+  return false
 }
 
 cartOrderFormSubmit.addEventListener("click", (e) => submitForm(e))
@@ -245,13 +244,13 @@ function prepareOrderData() {
     city: document.getElementById("city").value
   }
 
-  const idProducts = []
+  const productId = []
   for (let i = 0; i < cart.length; i++) {
-    idProducts.push(cart[i].id)
+    productId.push(cart[i].id)
   }
 
   const orderData = {
-    products: idProducts,
+    products: productId,
     contact: contactData
   }
   return orderData
