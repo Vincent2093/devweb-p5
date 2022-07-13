@@ -10,7 +10,7 @@ const id = url.searchParams.get("id");
 
 retrieveProductWithId();
 
-//Récupération du produit via l'API selon son id passé dans l'URL
+// Récupération du produit via l'API selon son id passé dans l'URL
 function retrieveProductWithId() {
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(response => response.json())
@@ -18,7 +18,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
     .catch(error => alert(error = "Ce produit n'a pu être affiché, merci de bien vouloir contacter notre assistance."))
 }
 
-// Fonction permettant l'affichage via le DOM des détails du produit
+// Affichage via le DOM des détails du produit
 function displayProductDetails(product) {
     productImage.src = product.imageUrl;
     productImage.alt = product.altTxt;
@@ -61,7 +61,7 @@ function checkCart(){
     checkProductExist(cart, color, quantity);
 }
 
-//Vérification de l'existence ou non d'un produit de couleur similaire dans le panier (local storage)
+// Vérification de l'existence ou non d'un produit de couleur similaire dans le panier (local storage)
 function checkProductExist(cart, color, quantity) {
 let test = parseInt(quantity);
 let productUpdate = cart.find((cart) => cart.id === id && cart.color === color);
@@ -70,14 +70,13 @@ if (productUpdate != undefined) {
     productUpdate.quantity = quantity;
 
     localStorage.setItem('cart', JSON.stringify(cart));
-
-    window.location.href = "cart.html";
 } else {
     sendNewProduct(cart, color, quantity);
 }
+moveToCartPage()
 } 
 
-//Envoi d'un produit non existant dans le panier (local storage)
+// Envoi d'un produit non existant dans le panier (local storage)
 function sendNewProduct(cart, color, quantity){
 
     cart.push({
@@ -90,6 +89,13 @@ function sendNewProduct(cart, color, quantity){
     });
 
     localStorage.setItem('cart', JSON.stringify(cart));
+}
 
-    window.location.href = "cart.html";
-} 
+// Choix après l'ajout d'un produit au panier d'aller à la page panier
+function moveToCartPage() {
+    if (window.confirm("Produit bein ajouté à votre panier. Voulez-vous aller à la page panier ? Cliquez sur Ok pour vous y rendre sinon cliquez sur Annuler pour rester sur cette page !")) {
+        window.location.href = "cart.html";
+    } else {
+        window.location;
+    }
+}
