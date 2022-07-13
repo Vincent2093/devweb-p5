@@ -1,93 +1,100 @@
-let cart = []
+let cart = [];
 
-retrieveProductCart()
+retrieveProductCart();
 
+//Récupération des produits depuis le panier (local storage)
 function retrieveProductCart() {
-//  console.log(localStorage.getItem('cart'))
   cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) :  [];
+
   if(cart.length === 0) {
     return;
   }
-    /* for (let i = 0; i < localStorage.length; i++) {
-      const product = localStorage.getItem(localStorage.key(i))
-      const productObjects = JSON.parse(product)
-      cart.push(productObjects)
-    } */
-  cart.forEach((cart) => displayProductCart(cart))
+
+  cart.forEach((cart) => getPrice(cart));
 }
 
-function displayProductCart(cart) {
-  const cartItem = document.createElement("article")
-  cartItem.classList.add("cart__item")
-  cartItem.setAttribute("data-id", cart.id)
-  cartItem.setAttribute("data-color", cart.color)
-  document.querySelector("#cart__items").appendChild(cartItem)
+//Récupération du prix des produits depuis l'API selon leurs id
+function getPrice(cart) {
+  fetch(`http://localhost:3000/api/products/${cart.id}`)
+  .then(response => response.json())
+  .then(product => displayProductCart(cart, product))
+  .catch(error => alert(error = "Notre site rencontre actuellement un problème, merci de bien vouloir contacter notre assistance."))
+}
 
-  const cartItemImg = document.createElement("div")
-  cartItemImg.classList.add("cart__item__img")
-  cartItem.appendChild(cartItemImg)
+// Affichage via le DOM du détail des produits présents dans le panier (local storage)
+function displayProductCart(cart, product) {
+  const cartItem = document.createElement("article");
+  cartItem.classList.add("cart__item");
+  cartItem.setAttribute("data-id", cart.id);
+  cartItem.setAttribute("data-color", cart.color);
+  document.querySelector("#cart__items").appendChild(cartItem);
 
-  const cartImg = document.createElement("img")
-  cartImg.src = cart.imgSrc
-  cartImg.alt = cart.imgAlt
-  cartItemImg.appendChild(cartImg)
+  const cartItemImg = document.createElement("div");
+  cartItemImg.classList.add("cart__item__img");
+  cartItem.appendChild(cartItemImg);
+
+  const cartImg = document.createElement("img");
+  cartImg.src = cart.imgSrc;
+  cartImg.alt = cart.imgAlt;
+  cartItemImg.appendChild(cartImg);
   
-  const cartItemContent = document.createElement("div")
-  cartItemContent.classList.add("cart__item__content")
-  cartItem.appendChild(cartItemContent)
+  const cartItemContent = document.createElement("div");
+  cartItemContent.classList.add("cart__item__content");
+  cartItem.appendChild(cartItemContent);
 
-  const cartItemContentDescription = document.createElement("div")
-  cartItemContentDescription.classList.add("cart__item__content__description")
-  cartItemContent.appendChild(cartItemContentDescription)
+  const cartItemContentDescription = document.createElement("div");
+  cartItemContentDescription.classList.add("cart__item__content__description");
+  cartItemContent.appendChild(cartItemContentDescription);
 
-  const cartProductName = document.createElement("h2")
-  cartProductName.textContent = cart.productName
-  cartItemContentDescription.appendChild(cartProductName)
+  const cartProductName = document.createElement("h2");
+  cartProductName.textContent = cart.productName;
+  cartItemContentDescription.appendChild(cartProductName);
 
-  const cartItemColor = document.createElement("p")
-  cartItemColor.textContent = cart.color
-  cartItemContentDescription.appendChild(cartItemColor)
+  const cartItemColor = document.createElement("p");
+  cartItemColor.textContent = cart.color;
+  cartItemContentDescription.appendChild(cartItemColor);
 
-  const cartItemPrice = document.createElement("p")
-  cartItemPrice.textContent = `${cart.price},00 €`
-  cartItemContentDescription.appendChild(cartItemPrice)
+  const cartItemPrice = document.createElement("p");
+  cartItemPrice.textContent = `${product.price},00 €`;
+  cartItemContentDescription.appendChild(cartItemPrice);
 
-  const cartItemContentSettings = document.createElement("div")
-  cartItemContentSettings.classList.add("cart__item__content__settings")
-  cartItemContent.appendChild(cartItemContentSettings)
+  const cartItemContentSettings = document.createElement("div");
+  cartItemContentSettings.classList.add("cart__item__content__settings");
+  cartItemContent.appendChild(cartItemContentSettings);
 
-  const cartItemContentSettingsQuantity = document.createElement("div")
-  cartItemContentSettingsQuantity.classList.add("cart__item__content__settings__quantity")
-  cartItemContentSettings.appendChild(cartItemContentSettingsQuantity)
+  const cartItemContentSettingsQuantity = document.createElement("div");
+  cartItemContentSettingsQuantity.classList.add("cart__item__content__settings__quantity");
+  cartItemContentSettings.appendChild(cartItemContentSettingsQuantity);
 
-  const cartItemQuantityParagraph = document.createElement("p")
-  cartItemQuantityParagraph.textContent = "Qté :"
-  cartItemContentSettingsQuantity.appendChild(cartItemQuantityParagraph)
+  const cartItemQuantityParagraph = document.createElement("p");
+  cartItemQuantityParagraph.textContent = "Qté :";
+  cartItemContentSettingsQuantity.appendChild(cartItemQuantityParagraph);
 
-  const cartItemQuantity = document.createElement("input")
-  cartItemQuantity.classList.add("itemQuantity")
-  cartItemQuantity.setAttribute("type", "number")
-  cartItemQuantity.setAttribute("name", "itemQuantity")
-  cartItemQuantity.setAttribute("min", "1")
-  cartItemQuantity.setAttribute("max", "100")
-  cartItemQuantity.setAttribute("value", cart.quantity)
-  cartItemContentSettingsQuantity.appendChild(cartItemQuantity)
-  cartItemQuantity.addEventListener("change", () => changeProductQuantity(cart.id, cartItemQuantity.value))
+  const cartItemQuantity = document.createElement("input");
+  cartItemQuantity.classList.add("itemQuantity");
+  cartItemQuantity.setAttribute("type", "number");
+  cartItemQuantity.setAttribute("name", "itemQuantity");
+  cartItemQuantity.setAttribute("min", "1");
+  cartItemQuantity.setAttribute("max", "100");
+  cartItemQuantity.setAttribute("value", cart.quantity);
+  cartItemContentSettingsQuantity.appendChild(cartItemQuantity);
+  cartItemQuantity.addEventListener("change", () => changeProductQuantity(cart.id, cart.color, cartItemQuantity.value));
 
-  const cartItemContentSettingsDelete = document.createElement("div")
-  cartItemContentSettingsDelete.classList.add("cart__item__content__settings__delete")
-  cartItemContentSettings.appendChild(cartItemContentSettingsDelete)
+  const cartItemContentSettingsDelete = document.createElement("div");
+  cartItemContentSettingsDelete.classList.add("cart__item__content__settings__delete");
+  cartItemContentSettings.appendChild(cartItemContentSettingsDelete);
 
-  const deleteItem = document.createElement("p")
-  deleteItem.classList.add("deleteItem")
-  deleteItem.textContent = "Supprimer"
-  cartItemContentSettingsDelete.appendChild(deleteItem)
-  deleteItem.addEventListener("click", () => deleteProduct(cart.id))
+  const deleteItem = document.createElement("p");
+  deleteItem.classList.add("deleteItem");
+  deleteItem.textContent = "Supprimer";
+  cartItemContentSettingsDelete.appendChild(deleteItem);
+  deleteItem.addEventListener("click", () => deleteProduct(cart.id));
 
-  displayTotalPrice()
-  displayTotalQuantity()
+  displayTotalPrice(cartItemPrice);
+  displayTotalQuantity();
 }
 
+// Suppression d'un produit du panier
 function deleteProduct(id) {
   const productDelete = cart.findIndex((cart) => cart.id === id)
   cart.splice(productDelete, 1)
@@ -95,132 +102,141 @@ function deleteProduct(id) {
   location.reload()
 }
 
+// Mise à jour du local storage après un changement de quantité ou une suppression de produit
 function updateLocalStorage() {
-//  const orderData = JSON.stringify(cart)
-//  localStorage.setItem(cart.id, orderData)
   localStorage.setItem('cart', JSON.stringify(cart));
 } 
 
-function changeProductQuantity(id, value) {
-  const productUpdate = cart.find((cart) => cart.id === id)
-  productUpdate.quantity = value
-  displayTotalPrice()
-  displayTotalQuantity()
-  updateLocalStorage()
+// Mise à jour de la quantité d'un produit
+function changeProductQuantity(id, color, value) {
+  const productUpdate = cart.find((cart) => cart.id === id && cart.color === color);
+  productUpdate.quantity = value;
+  displayTotalPrice();
+  displayTotalQuantity();
+  updateLocalStorage();
 }
 
-function displayTotalPrice() {
-  let price = 0
-  const displayPrice = document.getElementById("totalPrice")
+// Affiche du prix total du panier
+function displayTotalPrice(cartItemPrice) {
+  let price = 0;
+  const displayPrice = document.getElementById("totalPrice");
   cart.forEach((cart) => {
-  const totalPrice = cart.price * cart.quantity
-  price += totalPrice
+  const totalPrice = cartItemPrice * cart.quantity;
+  price += totalPrice;
 })
-displayPrice.textContent = `${price},00`
+displayPrice.textContent = `${price},00`;
 }
 
+// Affichage de la quantité totale de tous les produits du panier
 function displayTotalQuantity() {
-  let quantity = 0
-  const displayQuantity = document.getElementById("totalQuantity")
+  let quantity = 0;
+  const displayQuantity = document.getElementById("totalQuantity");
   cart.forEach((cart) => {
-    quantity += parseInt(cart.quantity)
+    quantity += parseInt(cart.quantity);
   })
-displayQuantity.textContent = quantity
+displayQuantity.textContent = quantity;
 }
 
-// FORM
+// Formulaire de commande
+const cartOrderForm = document.querySelector(".cart__order__form");
+const cartOrderFormSubmit = document.getElementById("order");
 
-const cartOrderForm = document.querySelector(".cart__order__form")
-const cartOrderFormSubmit = document.getElementById("order")
+// Prise en compte d'un changement de valeur dans l'un des éléments du formulaire
+cartOrderForm.firstName.addEventListener("change", () => checkFirstName(firstName));
+cartOrderForm.lastName.addEventListener("change", () => checkLastName(lastName));
+cartOrderForm.address.addEventListener("change", () => checkAddress(address));
+cartOrderForm.city.addEventListener("change", () => checkCity(city));
+cartOrderForm.email.addEventListener("change", () => checkEmail(email));
 
-cartOrderForm.firstName.addEventListener("change", () => checkFirstName(firstName))
-cartOrderForm.lastName.addEventListener("change", () => checkLastName(lastName))
-cartOrderForm.address.addEventListener("change", () => checkAddress(address))
-cartOrderForm.city.addEventListener("change", () => checkCity(city))
-cartOrderForm.email.addEventListener("change", () => checkEmail(email))
-
+// Vérification des informations renseignées dans l'élément firstName du formulaire
 function checkFirstName(firstName) {
-  const regExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$")
-  const test = regExp.test(firstName.value)
-  const errorMsg = document.getElementById("firstNameErrorMsg")
+  const regExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$");
+  const test = regExp.test(firstName.value);
+  const errorMsg = document.getElementById("firstNameErrorMsg");
 
   if (test) {
-    errorMsg.textContent = " "
-    return true
+    errorMsg.textContent = " ";
+    return true;
   }
 
-  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
-  return false
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement.";
+  return false;
 }
 
+// Vérification des informations renseignées dans l'élément lastName du formulaire
 function checkLastName(lastName) {
-  const regExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$")
-  const test = regExp.test(lastName.value)
-  const errorMsg = document.getElementById("lastNameErrorMsg")
+  const regExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$");
+  const test = regExp.test(lastName.value);
+  const errorMsg = document.getElementById("lastNameErrorMsg");
 
   if (test) {
-    errorMsg.textContent = " "
-    return true
+    errorMsg.textContent = " ";
+    return true;
   }
 
-  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
-  return false
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement.";
+  return false;
 }
 
+// Vérification des informations renseignées dans l'élément address du formulaire
 function checkAddress(address) {
-  const regExp = new RegExp("^[a-zA-ZÀ-ÿ0-9 ,.'-]{2,}$")
-  const test = regExp.test(address.value)
-  const errorMsg = document.getElementById("addressErrorMsg")
+  const regExp = new RegExp("^[a-zA-ZÀ-ÿ0-9 ,.'-]{2,}$");
+  const test = regExp.test(address.value);
+  const errorMsg = document.getElementById("addressErrorMsg");
 
   if (test) {
-    errorMsg.textContent = " "
-    return true
+    errorMsg.textContent = " ";
+    return true;
   }
 
-  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres et chiffres uniquement."
-  return false
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres et chiffres uniquement.";
+  return false;
 }
 
+// Vérification des informations renseignées dans l'élément city du formulaire
 function checkCity(city) {
-  const regExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$")
-  const test = regExp.test(city.value)
-  const errorMsg = document.getElementById("cityErrorMsg")
+  const regExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$");
+  const test = regExp.test(city.value);
+  const errorMsg = document.getElementById("cityErrorMsg");
 
   if (test) {
-    errorMsg.textContent = " "
-    return true
+    errorMsg.textContent = " ";
+    return true;
   }
 
-  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement."
-  return false
+  errorMsg.textContent = "Deux caractères minimum et utilisation de lettres uniquement.";
+  return false;
 }
 
+// Vérification des informations renseignées dans l'élément email du formulaire
 function checkEmail(email) {
-  const regExp = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-zA-Z]")
-  const test = regExp.test(email.value)
-  const errorMsg = document.getElementById("emailErrorMsg")
+  const regExp = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-zA-Z]");
+  const test = regExp.test(email.value);
+  const errorMsg = document.getElementById("emailErrorMsg");
 
   if (test) {
-    errorMsg.textContent = " "
-    return true
+    errorMsg.textContent = " ";
+    return true;
   }
 
-  errorMsg.textContent = "Merci de respecter le format xx@xx.xx"
-  return false
+  errorMsg.textContent = "Merci de respecter le format xx@xx.xx";
+  return false;
 }
 
-cartOrderFormSubmit.addEventListener("click", (e) => submitForm(e))
+// Appel de la fonction submitForm au clique du bouton "Commander !"
+cartOrderFormSubmit.addEventListener("click", (e) => submitForm(e));
 
+// Vérification de la présence d'au moins un produit dans le panier et de toutes les informations renseignées dans le formulaire
 function submitForm(e) {
-    e.preventDefault()
-    const firstName = document.getElementById("firstName")
-    const lastName = document.getElementById("lastName")
-    const address = document.getElementById("address")
-    const city = document.getElementById("city")
-    const email = document.getElementById("email")
+    e.preventDefault();
+    const firstName = document.getElementById("firstName");
+    const lastName = document.getElementById("lastName");
+    const address = document.getElementById("address");
+    const city = document.getElementById("city");
+    const email = document.getElementById("email");
 
     if (cart.length === 0) {
-      alert("Votre panier est vide ! ")
+      alert("Votre panier est vide ! ");
     } else if (
       checkFirstName(firstName) &&
       checkLastName(lastName) &&
@@ -228,13 +244,14 @@ function submitForm(e) {
       checkCity(city) &&
       checkEmail(email)
     ) {
-      sendOrderData()
-      alert("Votre commande a bien été prise en compte !")
+      sendOrderData();
+      alert("Votre commande a bien été prise en compte !");
     } else {
-      alert("Merci de vérifier votre formulaire !")
+      alert("Merci de vérifier votre formulaire !");
     }
 }
 
+// Préparation des données du formulaire et du panier avant envoi à l'API
 function prepareOrderData() {
   const contactData = {
     firstName: document.getElementById("firstName").value,
@@ -246,18 +263,19 @@ function prepareOrderData() {
 
   const productId = []
   for (let i = 0; i < cart.length; i++) {
-    productId.push(cart[i].id)
+    productId.push(cart[i].id);
   }
 
   const orderData = {
     products: productId,
     contact: contactData
   }
-  return orderData
+  return orderData;
 }
 
+// Envoi des données à l'API
 function sendOrderData() {
-  const orderData = prepareOrderData()
+  const orderData = prepareOrderData();
 
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
