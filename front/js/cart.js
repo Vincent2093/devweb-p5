@@ -1,7 +1,5 @@
 let cart = [];
 
-retrieveProductCart();
-
 //Récupération des produits depuis le panier (local storage)
 function retrieveProductCart() {
   cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) :  [];
@@ -13,6 +11,8 @@ function retrieveProductCart() {
   cart.forEach((cart) => getPrice(cart));
   displayTotalQuantity();
 }
+
+retrieveProductCart();
 
 //Récupération du prix des produits depuis l'API selon leurs id
 function getPrice(cart) {

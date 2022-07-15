@@ -8,8 +8,6 @@ const btnCart = document.getElementById("addToCart");
 const url = new URL(document.location);
 const id = url.searchParams.get("id");
 
-retrieveProductWithId();
-
 // Récupération du produit via l'API selon son id passé dans l'URL
 function retrieveProductWithId() {
 fetch(`http://localhost:3000/api/products/${id}`)
@@ -17,6 +15,8 @@ fetch(`http://localhost:3000/api/products/${id}`)
     .then(product => displayProductDetails(product))
     .catch(error => alert(error = "Ce produit n'a pu être correctement affiché, merci de bien vouloir contacter notre assistance."))
 }
+
+retrieveProductWithId();
 
 // Affichage via le DOM des détails du produit
 function displayProductDetails(product) {

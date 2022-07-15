@@ -1,5 +1,3 @@
-retrieveAllProducts();
-
 // Récupération des produits depuis l'API
 function retrieveAllProducts() {
 fetch("http://localhost:3000/api/products")
@@ -7,6 +5,8 @@ fetch("http://localhost:3000/api/products")
     .then(products => addAllProducts(products))
     .catch(error => alert(error = "Notre site rencontre actuellement un problème, merci de bien vouloir contacter notre assistance."))
 }
+
+retrieveAllProducts();
 
 // Appel de la fonction d'affichage pour chacun des produits récupérés
 function addAllProducts(products) {
