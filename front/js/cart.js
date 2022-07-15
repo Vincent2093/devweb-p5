@@ -11,18 +11,22 @@ function retrieveProductCart() {
   }
 
   cart.forEach((cart) => getPrice(cart));
+  displayTotalQuantity();
 }
 
 //Récupération du prix des produits depuis l'API selon leurs id
 function getPrice(cart) {
   fetch(`http://localhost:3000/api/products/${cart.id}`)
   .then(response => response.json())
-  .then(product => displayProductCart(cart, product))
+  .then(product => {
+    cart.price = product.price;
+    displayProductCart(cart);
+  })
   .catch(error => alert(error = "Notre site rencontre actuellement un problème, merci de bien vouloir contacter notre assistance."))
 }
 
 // Affichage via le DOM du détail des produits présents dans le panier (local storage)
-function displayProductCart(cart, product) {
+function displayProductCart(cart) {
   const cartItem = document.createElement("article");
   cartItem.classList.add("cart__item");
   cartItem.setAttribute("data-id", cart.id);
@@ -55,7 +59,7 @@ function displayProductCart(cart, product) {
   cartItemContentDescription.appendChild(cartItemColor);
 
   const cartItemPrice = document.createElement("p");
-  cartItemPrice.textContent = `${product.price},00 €`;
+  cartItemPrice.textContent = `${cart.price},00 €`;
   cartItemContentDescription.appendChild(cartItemPrice);
 
   const cartItemContentSettings = document.createElement("div");
@@ -88,15 +92,14 @@ function displayProductCart(cart, product) {
   deleteItem.classList.add("deleteItem");
   deleteItem.textContent = "Supprimer";
   cartItemContentSettingsDelete.appendChild(deleteItem);
-  deleteItem.addEventListener("click", () => deleteProduct(cart.id));
+  deleteItem.addEventListener("click", () => deleteProduct(cart.id, cart.color));
 
-  displayTotalPrice(cartItemPrice);
-  displayTotalQuantity();
+  displayTotalPrice();
 }
 
 // Suppression d'un produit du panier
-function deleteProduct(id) {
-  const productDelete = cart.findIndex((cart) => cart.id === id)
+function deleteProduct(id, color) {
+  const productDelete = cart.findIndex((cart) => cart.id === id && cart.color === color)
   cart.splice(productDelete, 1)
   updateLocalStorage()
   location.reload()
@@ -117,14 +120,16 @@ function changeProductQuantity(id, color, value) {
 }
 
 // Affiche du prix total du panier
-function displayTotalPrice(cartItemPrice) {
-  let price = 0;
+function displayTotalPrice() {
   const displayPrice = document.getElementById("totalPrice");
-  cart.forEach((cart) => {
-  const totalPrice = cartItemPrice * cart.quantity;
-  price += totalPrice;
-})
-displayPrice.textContent = `${price},00`;
+  let total = 0;
+  cart.forEach((product) => {
+    if(undefined === product.price){
+      return;
+    }
+    total += product.price * product.quantity;
+  });
+  displayPrice.textContent = `${total},00`;
 }
 
 // Affichage de la quantité totale de tous les produits du panier
@@ -133,7 +138,7 @@ function displayTotalQuantity() {
   const displayQuantity = document.getElementById("totalQuantity");
   cart.forEach((cart) => {
     quantity += parseInt(cart.quantity);
-  })
+  });
 displayQuantity.textContent = quantity;
 }
 

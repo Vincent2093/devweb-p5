@@ -15,7 +15,7 @@ function retrieveProductWithId() {
 fetch(`http://localhost:3000/api/products/${id}`)
     .then(response => response.json())
     .then(product => displayProductDetails(product))
-    .catch(error => alert(error = "Ce produit n'a pu être affiché, merci de bien vouloir contacter notre assistance."))
+    .catch(error => alert(error = "Ce produit n'a pu être correctement affiché, merci de bien vouloir contacter notre assistance."))
 }
 
 // Affichage via le DOM des détails du produit
@@ -57,23 +57,22 @@ function checkCart(){
         alert("Merci de choisir une quantité comprise entre 1 et 100 !");
         return;
     }
-
     checkProductExist(cart, color, quantity);
 }
 
 // Vérification de l'existence ou non d'un produit de couleur similaire dans le panier (local storage)
 function checkProductExist(cart, color, quantity) {
-let test = parseInt(quantity);
+let intQuantity = parseInt(quantity);
 let productUpdate = cart.find((cart) => cart.id === id && cart.color === color);
 if (productUpdate != undefined) {
-    quantity = test += parseInt(productUpdate.quantity);
+    quantity = intQuantity += parseInt(productUpdate.quantity);
     productUpdate.quantity = quantity;
 
     localStorage.setItem('cart', JSON.stringify(cart));
 } else {
     sendNewProduct(cart, color, quantity);
 }
-moveToCartPage()
+moveToCartPage();
 } 
 
 // Envoi d'un produit non existant dans le panier (local storage)
@@ -91,9 +90,9 @@ function sendNewProduct(cart, color, quantity){
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Choix après l'ajout d'un produit au panier d'aller à la page panier
+// Choix après l'ajout d'un produit d'aller à la page panier
 function moveToCartPage() {
-    if (window.confirm("Produit bein ajouté à votre panier. Voulez-vous aller à la page panier ? Cliquez sur Ok pour vous y rendre sinon cliquez sur Annuler pour rester sur cette page !")) {
+    if (window.confirm("Produit bien ajouté à votre panier. Voulez-vous aller à la page panier ? Cliquez sur Ok pour vous y rendre sinon cliquez sur Annuler pour rester sur cette page !")) {
         window.location.href = "cart.html";
     } else {
         window.location;
