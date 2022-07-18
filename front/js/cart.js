@@ -3,6 +3,7 @@ let cart = [];
 //Récupération des produits depuis le panier (local storage)
 function retrieveProductCart() {
   cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) :  [];
+  console.log(cart)
 
   if(cart.length === 0) {
     return;

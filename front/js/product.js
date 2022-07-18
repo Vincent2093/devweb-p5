@@ -47,13 +47,13 @@ function checkCart(){
     const quantity = document.getElementById("quantity").value;
     const cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
 
-    if (color === "" && quantity == 0){
+    if (color === "" && quantity <= 0){
         alert("Merci de choisir une couleur et une quantité supérieur à 0 !");
         return;
     } else if (color === ""){
         alert("Merci de choisir une couleur !");
         return;
-    } else if (quantity == 0 || quantity > 100){
+    } else if (quantity <= 0 || quantity > 100){
         alert("Merci de choisir une quantité comprise entre 1 et 100 !");
         return;
     }
